@@ -2,41 +2,91 @@
 
 Last updated: 2026-10-04
 
-## Current Phase
+---
 
-PHASE 1 — PROJECT FOUNDATION
+## Current Status
 
-The objective is to establish a clean, stable and testable technical foundation before implementing business modules.
+**Phase:** Phase 1 — Project Foundation
+**Current actionable step:** Step 7 - Frontend Foundation Verification (NEXT)
+**Previous step:** Step 6 - Backend Verification (COMPLETE)
+**Overall status:** IN PROGRESS
+
+### Current blocker
+
+None for Step 6. Backend tests, package build, standalone startup, health, SQLite/Flyway, loopback binding, and graceful shutdown all passed on Windows on 2026-10-04 with Java 21.0.8 and Maven 3.8.5.
+
+### Next action
+
+Step 7 - Frontend Foundation Verification is NEXT.
 
 ---
 
-## Already Created
+# Phase 1 — Project Foundation
+
+The objective of Phase 1 is to establish a clean, stable, testable and reproducible technical foundation before implementing any JBStock business module.
+
+---
+
+## Existing Project
 
 Repository root:
 
-Jbstock/
+`Jbstock/`
 
-Existing components:
+Current main components:
 
-- `Jbstock-backend/`
-  - Spring Boot project already generated.
+### Backend
 
-- `Jbstock-frontend/`
-  - React + Vite project already generated.
-  - Tailwind CSS configuration has been started.
+`Jbstock-backend/`
 
-- `docs/`
-  - full JBStock specification;
-  - `DECISIONS.md`;
-  - this `CURRENT_PHASE.md`.
+Spring Boot backend already exists.
 
-Do NOT recreate these projects.
+Current foundation:
+
+- Java 21
+- Maven
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- Spring Security
+- Validation
+- Actuator
+- Flyway
+
+SQLite and Flyway configuration are implemented.
+
+### Frontend
+
+`Jbstock-frontend/`
+
+React + Vite frontend already exists.
+
+Current foundation:
+
+- React
+- Vite
+- TypeScript
+- Tailwind CSS 4
+
+The original JavaScript/JSX scaffold has already been migrated to TypeScript/TSX.
+
+### Documentation
+
+`docs/`
+
+Contains:
+
+- complete JBStock specification;
+- `DECISIONS.md`;
+- `CURRENT_PHASE.md`.
+
+Do NOT recreate the backend or frontend projects.
 
 ---
 
-## Target Stack
+# Target Architecture
 
-Backend:
+## Backend
 
 - Java 21
 - Maven
@@ -49,34 +99,24 @@ Backend:
 - Flyway
 - SQLite
 
-Frontend:
+## Frontend
 
 - React
 - Vite
 - TypeScript
 - Tailwind CSS
 
-Desktop later:
+## Desktop — Later Phase
 
 - Electron
 
----
-
-## Important Current Decision
-
-The existing frontend currently needs to be checked to determine whether it was initialized with JavaScript (`.jsx`) rather than TypeScript (`.tsx`).
-
-Because JBStock is still at the beginning of development, convert/reinitialize the frontend appropriately now if necessary rather than postponing a JavaScript → TypeScript migration until later.
-
-Do not make this change blindly.
-
-Inspect the current frontend first.
+Electron is intentionally out of scope for the current phase.
 
 ---
 
-# Current Milestone
+# Phase 1 Milestone
 
-The first milestone is:
+The backend foundation must eventually provide:
 
 Spring Boot
 ↓
@@ -86,196 +126,295 @@ Flyway
 ↓
 Health endpoint
 
-and then:
+The frontend foundation must provide:
 
-React/Vite
+React + Vite
+↓
+TypeScript
 ↓
 Tailwind
 ↓
 Backend health request
 
-The milestone is complete only when both applications start correctly and the frontend can successfully communicate with the backend.
+Phase 1 is complete only when:
+
+- backend builds successfully;
+- backend tests pass;
+- SQLite works;
+- Flyway migrations work;
+- backend health endpoint works;
+- frontend builds successfully;
+- frontend lint/type checking succeeds;
+- Tailwind works;
+- frontend can communicate with the backend;
+- documentation reflects the real implementation;
+- a stable Git checkpoint exists.
 
 ---
 
 # Step 1 — Repository Audit
 
-STATUS: COMPLETE
+**STATUS: COMPLETE**
 
-Before modifying code:
+The existing repository was inspected before implementation changes.
 
-Inspect:
-
-### Backend
+## Backend inspected
 
 - `pom.xml`
 - Java version
 - Spring Boot version
-- existing dependencies
+- dependencies
 - package structure
-- configuration files
-- test configuration
+- configuration
+- tests
 
-### Frontend
+## Frontend inspected
 
 - `package.json`
 - Vite configuration
 - JavaScript vs TypeScript
-- Tailwind installation/configuration
-- current source structure
+- Tailwind configuration
+- source structure
 - scripts
-- existing dependencies
+- dependencies
 
-### Repository
+## Repository inspected
 
 - `.gitignore`
 - project organization
-- documentation files
+- documentation structure
 
-Report problems before making major changes.
+## Important findings
+
+- Java 21 was already configured.
+- Backend project already existed and did not need recreation.
+- Frontend project already existed.
+- Frontend was originally JavaScript/JSX.
+- TypeScript migration was appropriate because development was still at the foundation stage.
+- Tailwind CSS 4 was already present.
+- Generated Vite starter content was still present.
+- Repository root initially lacked a shared `.gitignore`.
 
 ---
 
 # Step 2 — Normalize Foundation
 
-STATUS: IN PROGRESS
+**STATUS: COMPLETE**
 
-Completed changes:
+## Implemented
 
-- Confirmed Java 21 configuration and retained it.
-- Removed unused Lombok dependency and annotation processor configuration.
-- Converted the React starter from JSX to strict TypeScript/TSX.
-- Added TypeScript type checking to the frontend build and lint configuration.
-- Retained Tailwind CSS 4 with its Vite plugin and CSS import.
-- Removed the unused React Compiler/Babel plugin setup.
-- Replaced generated starter screen and metadata with JBStock branding.
-- Added a repository-root `.gitignore`.
+- Confirmed Java 21 and retained it.
+- Converted frontend from JavaScript/JSX to TypeScript/TSX.
+- Added strict TypeScript configuration.
+- Added TypeScript checking to the frontend workflow.
+- Updated lint configuration for TypeScript.
+- Retained Tailwind CSS 4.
+- Retained `@tailwindcss/vite`.
+- Removed unnecessary React Compiler/Babel-specific configuration.
+- Removed generated Vite starter presentation/branding.
+- Added JBStock baseline branding/metadata.
+- Added repository-root `.gitignore`.
+- Removed currently unused Lombok dependency/configuration.
 
-Verification:
+## Backend verification
 
-- `mvn -q -DskipTests package` passed with installed Maven 3.9.9.
-- `npm run lint` passed.
-- `npm run build` passed TypeScript compilation but Vite bundling was blocked by sandbox `spawn EPERM` and an unloadable Tailwind Windows native binding in `node_modules`.
+Executed:
 
-After Step 1 is approved:
+`mvn -q -DskipTests package`
 
-- fix dependency/configuration problems;
-- confirm Java 21;
-- ensure frontend uses TypeScript;
-- complete Tailwind configuration;
-- ensure both projects build independently.
+Result:
+
+**PASS**
+
+Environment used:
+
+- Java 21
+- Maven 3.9.9
+
+## Frontend verification
+
+Verified on 2026-10-04 on Windows with Node.js 24.11.1 and npm 11.6.2:
+
+- `npm.cmd ci --fetch-retries=0 --fetch-timeout=20000` — PASS; installed 174 packages from the existing lockfile, with 0 reported vulnerabilities.
+- `npm.cmd run lint` — PASS.
+- `npm.cmd run build` — PASS; TypeScript compilation and Vite 8.3.2 production bundling completed successfully.
+- Generated production CSS includes the Tailwind utility used by the baseline heading.
+
+The checkout initially had no `node_modules`, so TypeScript and ESLint were unavailable. PowerShell blocked the `npm.ps1` launcher; using `npm.cmd` required no execution-policy change. The sandboxed dependency install stalled and was stopped; installation outside the sandbox succeeded. The subsequent lint and build commands passed inside the sandbox.
+
+The earlier `spawn EPERM` and Tailwind native-binding failures did not recur after installing the locked dependencies. No application source, dependency versions, lockfile, or build configuration needed changes. The exact cause of the historical failures was not established.
+
+Step 2 is COMPLETE. Backend packaging remains verified by the earlier successful command recorded above; it was not rerun during this frontend-only verification. Backend tests/runtime verification remain scheduled for later steps.
 
 ---
 
-# Step 3 — SQLite
+## Note about Lombok
 
-STATUS: NEXT
+Lombok was removed because it was not currently used.
+
+This is not a permanent architectural prohibition.
+
+It may be reintroduced later if it provides a concrete benefit to the Java implementation.
+
+---
+
+# Step 3 - SQLite Foundation
+
+**STATUS: COMPLETE**
+
+Step 3 was implemented and verified on 2026-10-04.
+
+## Objective
+
+Establish reliable local SQLite connectivity without introducing business entities.
+
+## Planned work
 
 Configure:
 
-- SQLite JDBC;
-- database path strategy;
-- JPA/Hibernate compatibility;
-- foreign keys;
-- WAL;
-- busy timeout.
+- SQLite JDBC driver;
+- SQLite database path strategy;
+- Hibernate/JPA compatibility;
+- foreign key enforcement;
+- WAL journal mode;
+- busy timeout;
+- appropriate connection configuration.
 
-Do not create business entities yet.
+## Important
+
+Do NOT create:
+
+- Product;
+- Customer;
+- Sale;
+- StockMovement;
+- Invoice;
+- or other business entities.
+
+This step concerns database infrastructure only.
 
 ---
 
-# Step 4 — Flyway
+# Step 4 - Flyway
 
-STATUS: PENDING
+**STATUS: COMPLETE**
 
-Configure Flyway.
+Step 4 was implemented and verified on 2026-10-04.
 
-Create only the minimum initial migration necessary to prove database migrations work.
+## Objective
 
-Do not create the complete business schema yet.
+Establish controlled database schema migration.
+
+Configure Flyway and create only the minimum migration required to prove that migrations execute successfully against SQLite.
+
+Do NOT create the complete JBStock business schema yet.
 
 ---
 
 # Step 5 — Backend Runtime
 
-STATUS: PENDING
+**STATUS: COMPLETE**
 
-Configure Spring Boot to:
+Step 5 was implemented and verified on 2026-10-04.
 
-- bind to `127.0.0.1`;
-- start reliably;
-- expose a health check;
-- connect successfully to SQLite;
-- execute Flyway migrations.
+Configure Spring Boot so that it:
+
+- binds to `127.0.0.1`;
+- starts reliably;
+- connects to SQLite;
+- executes Flyway migrations;
+- exposes the required health endpoint.
+
+Do not expose the backend to the LAN by default.
 
 ---
 
 # Step 6 — Backend Verification
 
-STATUS: PENDING
+**STATUS: COMPLETE**
+
+Step 5 is successfully verified. This is the next actionable step.
 
 Verify:
 
-- `mvn test`;
+- Maven tests;
 - application startup;
 - SQLite database creation;
-- Flyway migration execution;
+- SQLite configuration;
+- Flyway execution;
 - health endpoint;
 - clean shutdown.
 
+Expected verification includes:
+
+`mvn test`
+
+Additional runtime verification should be performed as required.
+
 ---
 
-# Step 7 — Frontend Foundation
+# Step 7 — Frontend Foundation Verification
 
-STATUS: PENDING
+**STATUS: NEXT**
 
-Verify:
+Step 6 is successfully verified. This is the next actionable step.
 
-- React + Vite startup;
+Verify the finalized frontend foundation:
+
+- React;
+- Vite;
 - TypeScript;
 - Tailwind CSS;
-- clean initial structure;
-- production build.
+- lint;
+- type checking;
+- production build;
+- clean baseline structure.
 
-Do not design the complete JBStock UI yet.
+Do not design the complete JBStock user interface yet.
 
 ---
 
-# Step 8 — Frontend ↔ Backend
+# Step 8 — Frontend ↔ Backend Connectivity
 
-STATUS: PENDING
+**STATUS: PENDING**
 
-Implement the smallest possible connectivity test.
+Implement the smallest possible frontend/backend connectivity test.
 
-React should call the local backend health endpoint.
+Expected flow:
 
-Expected result:
-
-Frontend
+React
 ↓
 Spring Boot
 ↓
-healthy
+Health endpoint
+↓
+Healthy response
 
-Do not implement authentication or business APIs yet.
+The purpose is infrastructure verification only.
+
+Do NOT implement authentication or business APIs during this step.
 
 ---
 
 # Step 9 — Foundation Checkpoint
 
-STATUS: PENDING
+**STATUS: PENDING**
 
-Before starting business functionality:
+Before Phase 2 begins, verify:
 
 - backend builds;
+- backend tests pass;
 - frontend builds;
-- tests pass;
+- frontend lint passes;
+- TypeScript checking passes;
 - SQLite works;
 - Flyway works;
 - health endpoint works;
 - frontend/backend communication works;
-- documentation reflects the actual state;
-- create a Git checkpoint/commit.
+- documentation matches implementation;
+- no unresolved foundation blocker remains.
+
+Create a stable Git checkpoint.
 
 Only then proceed to Phase 2.
 
@@ -287,16 +426,18 @@ Do NOT implement yet:
 
 - company onboarding;
 - authentication;
-- users/roles;
+- users and roles;
 - products;
 - categories;
 - brands;
-- images;
-- stock;
+- product images;
+- inventory;
+- stock movements;
 - customers;
 - suppliers;
 - sales;
 - purchases;
+- payments;
 - invoices;
 - audit log;
 - backup system;
@@ -306,18 +447,110 @@ Do NOT implement yet:
 - MSIX;
 - Microsoft Store integration.
 
+These belong to later phases.
+
+---
+
+# Documentation Rules
+
+## CURRENT_PHASE.md
+
+This file represents the actual development state.
+
+After every successfully verified step:
+
+1. mark the completed step as `COMPLETE`;
+2. record the important implementation performed;
+3. record tests/builds executed;
+4. record relevant unresolved issues;
+5. identify exactly one next actionable step;
+6. update the Current Status section.
+
+Never mark a step COMPLETE solely because code was written.
+
+Verification must succeed first.
+
+---
+
+## DECISIONS.md
+
+`DECISIONS.md` contains stable architectural and technical decisions.
+
+Update it only when implementation establishes or changes a decision that future work must respect.
+
+Examples:
+
+- database location;
+- persistence strategy;
+- security conventions;
+- API conventions;
+- chosen libraries;
+- backup strategy;
+- media storage strategy.
+
+Do NOT use `DECISIONS.md` as a progress log.
+
+---
+
+## Full Specification
+
+The full JBStock specification represents the intended product and high-level architecture.
+
+Do not update it after ordinary implementation tasks.
+
+Update it only when an approved product requirement or high-level architecture actually changes.
+
 ---
 
 # Working Rule
 
-Only work on the current step.
+Only work on the current actionable step.
 
-Do not automatically proceed through all pending steps.
+Do not automatically continue into subsequent steps.
 
-At the end of each completed step:
+Development workflow:
+
+inspect
+↓
+plan
+↓
+approval when necessary
+↓
+implement
+↓
+test
+↓
+verify
+↓
+update documentation
+↓
+STOP
+
+At the end of every development step:
 
 1. run relevant tests/builds;
-2. summarize modifications;
-3. update this file;
-4. clearly identify the next step;
-5. stop if the next step represents a new meaningful implementation task.
+2. fix problems directly related to that step;
+3. summarize modifications;
+4. update `CURRENT_PHASE.md`;
+5. update `DECISIONS.md` only if a lasting decision was made;
+6. identify the next step;
+7. stop before beginning that next step.
+
+If a step cannot be fully verified, keep it `IN PROGRESS` and clearly record the blocker.
+
+
+### Step 3 Verification Record
+
+Implemented SQLite JDBC, Hibernate SQLite dialect, file path configuration, database directory creation, and SQLite pragmas (foreign keys, WAL, 5-second busy timeout). No business entities or migrations were added. Backend tests passed (2 tests, 0 failures/errors) and the package build passed on Windows with Java 21.0.8 and Maven 3.8.5 on 2026-10-04.
+
+
+### Step 4 Verification Record
+
+Added the minimal `application_metadata` table migration and a marker row to verify Flyway execution against SQLite. Added a test asserting the marker and successful Flyway schema history. mvn test passed (3 tests, 0 failures/errors); Flyway validated and applied V1. mvn -B -ntp -DskipTests package passed. Verified on Windows with Java 21.0.8 and Maven 3.8.5 on 2026-10-04.
+
+### Step 5 Verification Record
+
+Configured Spring Boot to bind to 127.0.0.1 and exposed only the Actuator health endpoint over HTTP. The health endpoint is publicly readable for local frontend/runtime checks; all other requests remain authenticated. Health details are hidden. Added an embedded-server integration test that requests /actuator/health over loopback and asserts HTTP 200 with status UP. `mvn test` passed (4 tests, 0 failures/errors), including SQLite and Flyway checks. `mvn -B -ntp -DskipTests package` passed. Verified on Windows with Java 21.0.8 and Maven 3.8.5 on 2026-10-04.
+### Step 6 Verification Record
+
+`mvn test` passed (4 tests, 0 failures/errors), covering application context startup, the health endpoint, SQLite pragmas, and Flyway migration history. `mvn -B -ntp -DskipTests package` passed. Independently launched the packaged application with a temporary SQLite database: the database file was created, Flyway validated and applied V1, the health endpoint returned UP, and the listener was confirmed at 127.0.0.1 only. Sent an interrupt and confirmed graceful Spring/Tomcat, JPA, and Hikari shutdown; the Java process exited and the port was released. Verified on Windows with Java 21.0.8 and Maven 3.8.5 on 2026-10-04.
