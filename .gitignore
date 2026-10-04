@@ -1,0 +1,19 @@
+# Build output and local dependencies
+**/node_modules/
+**/dist/
+**/target/
+**/build/
+
+# Local environment and logs
+*.log
+*.local
+.env
+.env.*
+!.env.example
+
+# IDE and operating system files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
