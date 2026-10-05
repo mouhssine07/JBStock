@@ -1,23 +1,23 @@
 # JBStock — Current Development Phase
 
-Last updated: 2026-10-04
+Last updated: 2026-10-05
 
 ---
 
 ## Current Status
 
 **Phase:** Phase 1 — Project Foundation
-**Current actionable step:** Step 7 - Frontend Foundation Verification (NEXT)
-**Previous step:** Step 6 - Backend Verification (COMPLETE)
-**Overall status:** IN PROGRESS
+**Current actionable step:** Phase 2 planning (NEXT)
+**Previous step:** Step 9 - Foundation Checkpoint (COMPLETE)
+**Overall status:** PHASE 1 COMPLETE
 
 ### Current blocker
 
-None for Step 6. Backend tests, package build, standalone startup, health, SQLite/Flyway, loopback binding, and graceful shutdown all passed on Windows on 2026-10-04 with Java 21.0.8 and Maven 3.8.5.
+No Phase 1 foundation blockers remain. The Step 9 Git checkpoint records the verified foundation. Git operations in this environment use a command-scoped safe.directory setting; no global Git configuration was changed.
 
 ### Next action
 
-Step 7 - Frontend Foundation Verification is NEXT.
+Review the approved Phase 2 scope before implementing business functionality.
 
 ---
 
@@ -355,9 +355,9 @@ Additional runtime verification should be performed as required.
 
 # Step 7 — Frontend Foundation Verification
 
-**STATUS: NEXT**
+**STATUS: COMPLETE**
 
-Step 6 is successfully verified. This is the next actionable step.
+Step 7 was verified on 2026-10-05 on Windows with the installed Node.js/npm toolchain.
 
 Verify the finalized frontend foundation:
 
@@ -372,13 +372,25 @@ Verify the finalized frontend foundation:
 
 Do not design the complete JBStock user interface yet.
 
+Verification results:
+
+- `npm.cmd run lint` — PASS.
+- `npm.cmd run typecheck` — PASS.
+- `npm.cmd run build` — PASS; TypeScript compilation and Vite production bundling completed successfully.
+- Confirmed the production CSS contains the Tailwind utilities used by the baseline screen (`min-h-screen`, `bg-slate-50`, and `text-slate-900`).
+- Confirmed the frontend remains a minimal React/TypeScript baseline without business UI.
+
+The checks passed when run individually. An initial combined PowerShell invocation stalled after lint without further output and was interrupted; running each check separately completed successfully.
+
+Step 8 is the next actionable step.
+
 ---
 
 # Step 8 — Frontend ↔ Backend Connectivity
 
-**STATUS: PENDING**
+**STATUS: COMPLETE**
 
-Implement the smallest possible frontend/backend connectivity test.
+Implemented and verified the smallest frontend/backend health connection. Step 7 was successfully verified; Step 9 is now the next actionable step.
 
 Expected flow:
 
@@ -394,11 +406,28 @@ The purpose is infrastructure verification only.
 
 Do NOT implement authentication or business APIs during this step.
 
+Implementation:
+
+- The React baseline requests `/api/health` on mount and presents `checking…`, `UP`, or `DOWN`.
+- Vite proxies `/api/health` to the backend's `/actuator/health` endpoint, rewriting the path and avoiding a development CORS change. The proxy target uses `JBSTOCK_BACKEND_URL` and defaults to `http://127.0.0.1:8080`.
+
+Verification:
+
+- `npm.cmd run lint` — PASS.
+- `npm.cmd run typecheck` — PASS.
+- `npm.cmd run build` — PASS.
+- Started the packaged backend with a temporary SQLite database. Startup created the database and Flyway successfully applied V1.
+- Backend `/actuator/health` returned HTTP 200.
+- Started Vite with the backend URL configured. Frontend proxy `/api/health` returned HTTP 200 and `{"groups":["liveness","readiness"],"status":"UP"}`.
+- Updated the health effect to avoid an immediate request abort during React Strict Mode effect replay.
+
+The temporary verification database was placed in the system temporary directory. No business API or authentication was added.
+
 ---
 
 # Step 9 — Foundation Checkpoint
 
-**STATUS: PENDING**
+**STATUS: COMPLETE**
 
 Before Phase 2 begins, verify:
 
@@ -414,9 +443,22 @@ Before Phase 2 begins, verify:
 - documentation matches implementation;
 - no unresolved foundation blocker remains.
 
-Create a stable Git checkpoint.
+Created a stable Git checkpoint after verifying the complete Phase 1 foundation.
 
-Only then proceed to Phase 2.
+Verification on 2026-10-05:
+
+- Backend `mvn test` — PASS (4 tests, 0 failures/errors).
+- Backend `mvn -DskipTests package` — PASS.
+- Frontend `npm run lint` — PASS.
+- Frontend `npm run typecheck` — PASS.
+- Frontend `npm run build` — PASS.
+- SQLite and Flyway — PASS in backend integration tests and standalone packaged runtime verification.
+- Backend health endpoint — HTTP 200, status UP.
+- Frontend-to-backend proxy request — HTTP 200, status UP.
+- Documentation reviewed and aligned with the implementation.
+- Stable Git checkpoint created after review.
+
+Phase 1 is complete. Before beginning Phase 2 implementation, review and agree on its scope.
 
 ---
 
