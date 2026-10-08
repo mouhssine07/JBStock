@@ -1,0 +1,69 @@
+{
+  "name": "jbstock-desktop",
+  "version": "0.0.1",
+  "private": true,
+  "description": "JBStock Windows desktop shell",
+  "author": "JBStock",
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "prepare:jdk": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/prepare-jdk.ps1",
+    "build:runtime": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/build-runtime.ps1",
+    "build:windows:dir": "electron-builder --win --dir --x64",
+    "build:windows:nsis": "electron-builder --win nsis --x64",
+    "build:windows:nsis:validation": "electron-builder --win nsis --x64 -c.appId=com.jbstock.validation.lifecycle -c.productName=JBStockLifecycleTest -c.executableName=JBStockLifecycleTest -c.directories.output=release/nsis-lifecycle -c.nsis.createDesktopShortcut=false -c.nsis.createStartMenuShortcut=false -c.nsis.runAfterFinish=false",
+    "build:windows:msix": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/build-msix.ps1",
+    "build:windows:msix:test": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/build-msix.ps1 -TestIdentity",
+    "test": "node --test test/*.test.cjs",
+    "test:backend": "node --test test/backend.integration.cjs",
+    "test:runtime": "node --test test/runtime.integration.cjs",
+    "test:msix": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/verify-msix.ps1",
+    "test:electron": "electron test/smoke.cjs",
+    "test:i18n": "node --test test/i18n.integration.cjs",
+    "test:packaged": "node --test test/packaged.integration.cjs",
+    "test:nsis": "node --test test/nsis.integration.cjs",
+    "test:database-access": "node --test test/database-failure.integration.cjs",
+    "measure:startup": "node scripts/measure-startup.cjs"
+  },
+  "build": {
+    "appId": "com.jbstock.desktop",
+    "productName": "JBStock",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../Jbstock-frontend/dist",
+        "to": "frontend"
+      },
+      {
+        "from": "../Jbstock-backend/target/Jbstock-backend-0.0.1-SNAPSHOT.jar",
+        "to": "backend/jbstock.jar"
+      },
+      {
+        "from": ".build/runtime",
+        "to": "runtime"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "${productName}-${version}-setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "electron": "44.6.0",
+    "electron-builder": "26.17.0"
+  }
+}

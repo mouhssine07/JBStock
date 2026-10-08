@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b --pretty",
     "lint": "eslint .",
+    "test:dev-proxy": "node scripts/test-dev-proxy.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

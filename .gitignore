@@ -3,6 +3,9 @@
 **/dist/
 **/target/
 **/build/
+**/.build/
+**/release/
+.tools/
 
 # Local environment and logs
 *.log

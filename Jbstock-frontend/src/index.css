@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+body {
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  text-align: start;
+}
+
+html[dir="rtl"] { line-height: 1.7; }
