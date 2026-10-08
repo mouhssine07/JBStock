@@ -664,6 +664,16 @@ Informations :
 
 ---
 
+## 19.1 Langues de l'application — exigence du 7 octobre 2026
+
+JBStock doit être disponible en **arabe (`ar`) et en anglais (`en`)**, avec **l'anglais par défaut** au premier lancement. Un sélecteur permet de changer la langue ; le choix est enregistré localement et conservé au redémarrage, sans connexion Internet.
+
+L'interface arabe doit être adaptée à la lecture de droite à gauche (**RTL**) et l'interface anglaise de gauche à droite (**LTR**), avec une typographie prenant en charge l'arabe. Les écrans, actions, validations et messages utilisateur, y compris les dialogues Electron, doivent être traduisibles via des ressources centralisées. Les dates, nombres et montants sont affichés selon la langue sélectionnée, sans modifier la devise configurée, les valeurs stockées ni les textes saisis par l'utilisateur.
+
+Les futurs modules et documents générés doivent respecter cette exigence ; la langue des factures doit pouvoir suivre le paramètre Entreprise. La mise en œuvre commence à la prochaine session par le formulaire Entreprise et le socle desktop existants. Cette section décrit une exigence cible, pas une fonctionnalité actuellement livrée.
+
+---
+
 # 20. Module Produits
 
 Le produit doit être générique.
@@ -2583,6 +2593,12 @@ restauration
 ### Règle 12
 
 Avant d'écrire du code complexe, l'assistant doit vérifier si une infrastructure équivalente existe déjà dans le projet afin d'éviter les doublons.
+
+---
+
+### Règle 13 — Multilingue obligatoire
+
+Respecter l'exigence arabe/anglais de la section 19.1 : anglais par défaut, choix local persistant, arabe RTL et anglais LTR. Toute nouvelle interface doit utiliser des traductions centralisées ; ne pas introduire de nouveaux textes utilisateur en dur. Les codes d'erreur et les données métier restent stables ; leur présentation est localisée. Vérifier les deux langues et les deux directions lors de l'intégration frontend/desktop.
 
 ---
 
